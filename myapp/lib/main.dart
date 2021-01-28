@@ -18,23 +18,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatefulWidget {
-  Home({Key key}) : super(key: key);
-  @override
-  _HomeState createState() => _HomeState();
-}
-
 class AppState {
   bool loading;
   User user;
   AppState(this.loading, this.user);
 }
 
-class _HomeState extends State<Home> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final app = AppState(false, null);
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
+  final app = AppState(false, null);
   @override
   Widget build(BuildContext context) {
     if (app.loading) return _loading();
@@ -96,6 +92,9 @@ class _HomeState extends State<Home> {
     );
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   Future<String> _signIn() async {
     setState(() => app.loading = true);
 
@@ -107,9 +106,9 @@ class _HomeState extends State<Home> {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    UserCredential userCredential =
+    final UserCredential userCredential =
         await _auth.signInWithCredential(googleAuthCredential);
-    final user = userCredential.user;
+    final User user = userCredential.user;
     setState(() {
       app.loading = false;
       app.user = user;
